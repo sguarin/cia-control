@@ -12,6 +12,8 @@
 
 /*=====[Definition macros of private constants]==============================*/
 
+#define DEBUG_PRINT_PROCESSING_TIME 0
+
 /*=====[Private function-like macros]========================================*/
 
 /*=====[Definitions of private data types]===================================*/
@@ -24,7 +26,7 @@
 
 /*=====[Prototypes (declarations) of private functions]======================*/
 
-void console_print (float* buffer);
+void console_print (pid_control_t* pid);
 
 /*=====[Implementations of public functions]=================================*/
 
@@ -34,6 +36,9 @@ void PID_Task( void* taskParmPtr )
 	uint32_t u = 0;
     pid_control_t *pid;
 	portTickType xLastWakeTime;
+#if DEBUG_PRINT_PROCESSING_TIME
+	uint32_t startCycles, cycles;
+#endif
 
 	pid = (pid_control_t*) taskParmPtr;
 
@@ -43,11 +48,19 @@ void PID_Task( void* taskParmPtr )
 	for(;;)
 	{
 		u++;
+#if DEBUG_PRINT_PROCESSING_TIME
+		startCycles = cyclesCounterRead();
+#endif
         // Run PID
         pid_run(pid);
+#if DEBUG_PRINT_PROCESSING_TIME
+		cycles = cyclesCounterRead() - startCycles;
+		printf("Cycles processing %u Time [us] %f\r\n", cycles, cyclesCounterToUs( cycles));
+#endif
+
         //if (! (u % 10000))
         	// print debug
-        	//console_print(pid);
+        	//console_print(b-a);
 
 		vTaskDelayUntil( &xLastWakeTime, ( pid->ts_ms / portTICK_RATE_MS ) );
 	}

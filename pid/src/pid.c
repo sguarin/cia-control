@@ -38,21 +38,26 @@ void pid_init(pid_control_t *pid, uint32_t ts_ms, void (*pfr)(float *, float *),
 	pid->state.pastY = 0;
 	pid->state.pastD = 0;
 
-	pid->config.h = 0.001;
-	pid->config.Kp = 6.5;
-	pid->config.Ti = 6.5 / 0.08 * pid->config.h;
-	pid->config.Td = 10 * pid->config.h / 6.5;
+	pid->config.h = (float)ts_ms / 1000;
+
+	pid->config.Kp = 6;
+	pid->config.Ti = 2.6 / 0.08 * pid->config.h;
+	pid->config.Td = 10 * pid->config.h / 5.6;
+
 	pid->config.b = 1;
 	pid->config.N = 10;
 }
 
 void pid_run(pid_control_t *pid) {
 	float r, y, u;
+	static float y_1 = 0;
 
 	pid->p_receive(&r, &y);
 
 	// should be y[n-1]?
-	u = pid_control(&(pid->config), &(pid->state), y, r);
+	u = pid_control(&(pid->config), &(pid->state), y_1, r);
+
+	y_1 = y;
 
 	pid->p_transmit(&u);
 }
