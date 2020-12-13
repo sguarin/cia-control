@@ -95,7 +95,6 @@ void IRLS_Init (t_IRLSdata* iData, uint32_t ts_Ms, void (*pfR)(float32_t*))
 	arm_mat_init_f32(&aux4, 1, 1, iData->buffer_aux4);
 	arm_mat_init_f32(&aux5, M_SIZE, 1, iData->buffer_aux5);
 
-
 	// Valores iniciales
 	iData->Yk_1 = 0;
 	iData->Yk_2 = 0;

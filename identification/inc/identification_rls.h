@@ -55,7 +55,7 @@ struct type_IRLSdata
 	float32_t buffer_aux2[M_SIZE];		    // Buffer de la matriz aux2 = Phi(k) P(k-1) (1 x M_SIZE)
 	float32_t buffer_aux3[M_SIZE * M_SIZE];	// Buffer de la matriz aux3 = K(k) aux2 (M_SIZE x M_SIZE)
 	float32_t buffer_aux4[1];	            // Buffer de la matriz aux4 = Phi(k) Theta(k-1) (1 x 1)
-	float32_t buffer_aux5[1];	            // Buffer de la matriz aux5 = K(k) Error(k) (1 x 1)
+	float32_t buffer_aux5[M_SIZE];	        // Buffer de la matriz aux5 = K(k) Error(k) (1 x 1)
 
 	float32_t Yk;		// Valor actual de Y. Y(k)
 	float32_t Yk_1;		// Valor de Y(k-1)

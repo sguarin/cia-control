@@ -25,8 +25,11 @@
 #define ADC0_CH_Y       CH3
 
 // Noise signal limits
-#define DAC_REFERENCE_VALUE_HIGH   666  // 1023 = 3.3V, 666 = 2.15V
-#define DAC_REFERENCE_VALUE_LOW    356  // 1023 = 3.3V, 356 = 1.15V
+//#define DAC_REFERENCE_VALUE_HIGH   666  // 1023 = 3.3V, 666 = 2.15V
+//#define DAC_REFERENCE_VALUE_LOW    356  // 1023 = 3.3V, 356 = 1.15V
+
+#define DAC_REFERENCE_VALUE_HIGH   800  // 1023 = 3.3V, 666 = 2.15V
+#define DAC_REFERENCE_VALUE_LOW    100  // 1023 = 3.3V, 356 = 1.15V
 
 // adcRead() returns 10 bits integer sample (uint16_t)
 // sampleInVolts = (3.3 / 1023.0) * adcSample
