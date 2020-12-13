@@ -33,8 +33,8 @@ pid_control_t *pid;
 
 /*=====[Prototypes (declarations) of private functions]======================*/
 
-void receiveData (float *u, float *y);
-void transmitData (float *u);
+void receive_data (float *u, float *y);
+void transmit_data (float *u);
 
 /*=====[Main function, program entry point after power on or reset]==========*/
 
@@ -50,7 +50,7 @@ int main (void)
 
     pid = (pid_control_t *) pvPortMalloc (sizeof(pid_control_t));
 
-	pid_init(pid, 1, receiveData, transmitData);
+	pid_init(pid, 1, receive_data, transmit_data);
 
     xTaskCreateStatic(
          PID_Task,                  	// task function
@@ -76,7 +76,7 @@ int main (void)
 /*=====[Implementations of private functions]================================*/
 
 // receive hook for reference and output of system
-void receiveData (float *r, float *y)
+void receive_data(float *r, float *y)
 {
     static uint32_t count = 0;
     static float rvalue = 0;
@@ -91,7 +91,7 @@ void receiveData (float *r, float *y)
 }
 
 // transmit hook of pid output
-void transmitData (float *u) {
+void transmit_data(float *u) {
 	uint16_t dacValue;
 
 	dacValue = (uint16_t)(*u * 1023.0 / 3.3);
