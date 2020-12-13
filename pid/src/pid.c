@@ -28,37 +28,51 @@ float pid_control(pid_config_t *config, pid_state_t *state, float y, float r);
 /*=====[Implementations of public functions]=================================*/
 
 void pid_init(pid_control_t *pid, uint32_t ts_ms, void (*pfr)(float *, float *), void (*pft)(float *)) {
+	float Kp, Ki, Kd;
 
 	pid->ts_ms = ts_ms;
 
 	pid->p_receive = pfr;
 	pid->p_transmit = pft;
 
+	pid->config.h = (float)ts_ms / 1000;
+
+	// sobrepico
+	Kp = 2;
+	Ki = 500;
+	Kd = 0.0015;
+
+	// Segunda opcion
+	Kp = 1.3;
+	Ki = 300;
+	Kd = 0.0001;
+
+	pid->config.Kp = Kp;
+	pid->config.Ti = Kp / Ki;
+	pid->config.Td = Kd / Kp;
+
+	pid->config.b = 1;
+	pid->config.N = 5;
+
 	pid->state.futureI = 0;
 	pid->state.pastY = 0;
 	pid->state.pastD = 0;
-
-	pid->config.h = (float)ts_ms / 1000;
-
-	pid->config.Kp = 6;
-	pid->config.Ti = 2.6 / 0.08 * pid->config.h;
-	pid->config.Td = 10 * pid->config.h / 5.6;
-
-	pid->config.b = 1;
-	pid->config.N = 10;
 }
 
 void pid_run(pid_control_t *pid) {
 	float r, y, u;
 	static float y_1 = 0;
 
+	// receive reference and output
 	pid->p_receive(&r, &y);
 
 	// should be y[n-1]?
 	u = pid_control(&(pid->config), &(pid->state), y_1, r);
 
+	// save previous y
 	y_1 = y;
 
+	// pid output
 	pid->p_transmit(&u);
 }
 

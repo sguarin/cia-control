@@ -3,10 +3,6 @@
 /*=====[Inclusions of private function dependencies]=========================*/
 
 #include "sapi.h"
-
-#include "arm_math.h"
-#include <math.h>
-
 #include "pid_tasks.h"
 #include "pid.h"
 
@@ -40,9 +36,10 @@ void PID_Task( void* taskParmPtr )
 	uint32_t startCycles, cycles;
 #endif
 
+	// get task parameter
 	pid = (pid_control_t*) taskParmPtr;
 
-	// Para implementar un delay relativo
+	// Relative delay
 	xLastWakeTime = xTaskGetTickCount();
 
 	for(;;)
